@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useEditor, EditorContent } from "@tiptap/react"
-import StarterKit from "@tiptap/starter-kit"
-import Heading from "@tiptap/extension-heading"
-import Link from "@tiptap/extension-link"
-import Image from "@tiptap/extension-image"
-import Highlight from "@tiptap/extension-highlight"
-import Typography from "@tiptap/extension-typography"
-import Placeholder from "@tiptap/extension-placeholder"
-import { Button } from "@/components/ui/button"
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Heading from "@tiptap/extension-heading";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import Highlight from "@tiptap/extension-highlight";
+import Typography from "@tiptap/extension-typography";
+import Placeholder from "@tiptap/extension-placeholder";
+import { Button } from "@/components/ui/button";
 import {
   Bold,
   Italic,
@@ -24,17 +24,27 @@ import {
   Redo,
   Quote,
   Highlighter,
-} from "lucide-react"
-import { useState, useEffect } from "react"
-import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "lucide-react";
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface RichTextEditorProps {
-  content: string
-  onChange: (content: string) => void
-  placeholder?: string
-  disabled?: boolean
+  content: string;
+  onChange: (content: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
 export function RichTextEditor({
@@ -43,14 +53,14 @@ export function RichTextEditor({
   placeholder = "开始编写内容...",
   disabled = false,
 }: RichTextEditorProps) {
-  const [linkUrl, setLinkUrl] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
-  const [selectedCodeLanguage, setSelectedCodeLanguage] = useState("js")
-  const [isClient, setIsClient] = useState(false)
+  const [linkUrl, setLinkUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [selectedCodeLanguage, setSelectedCodeLanguage] = useState("js");
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    setIsClient(true);
+  }, []);
 
   const editor = useEditor({
     extensions: [
@@ -73,38 +83,53 @@ export function RichTextEditor({
     content,
     editable: !disabled,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML())
+      onChange(editor.getHTML());
     },
     editorProps: {
       attributes: {
-        class: "prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[200px] max-w-none p-4",
+        class:
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[200px] max-w-none p-4",
       },
     },
-  })
+    immediatelyRender: false,
+  });
 
   if (!editor || !isClient) {
-    return <div className="border rounded-md h-[300px] flex items-center justify-center">加载编辑器中...</div>
+    return (
+      <div className="border rounded-md h-[300px] flex items-center justify-center">
+        加载编辑器中...
+      </div>
+    );
   }
 
   const addLink = () => {
     if (linkUrl) {
-      editor.chain().focus().extendMarkRange("link").setLink({ href: linkUrl }).run()
-      setLinkUrl("")
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: linkUrl })
+        .run();
+      setLinkUrl("");
     } else {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run()
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
     }
-  }
+  };
 
   const addImage = () => {
     if (imageUrl) {
-      editor.chain().focus().setImage({ src: imageUrl }).run()
-      setImageUrl("")
+      editor.chain().focus().setImage({ src: imageUrl }).run();
+      setImageUrl("");
     }
-  }
+  };
 
   const addCodeBlock = () => {
-    editor.chain().focus().toggleCodeBlock({ language: selectedCodeLanguage }).run()
-  }
+    editor
+      .chain()
+      .focus()
+      .toggleCodeBlock({ language: selectedCodeLanguage })
+      .run();
+  };
 
   return (
     <div className="border rounded-md overflow-hidden">
@@ -113,7 +138,9 @@ export function RichTextEditor({
           variant="ghost"
           size="icon"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run() || disabled}
+          disabled={
+            !editor.can().chain().focus().toggleBold().run() || disabled
+          }
           className={editor.isActive("bold") ? "bg-muted" : ""}
           type="button"
         >
@@ -124,7 +151,9 @@ export function RichTextEditor({
           variant="ghost"
           size="icon"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={!editor.can().chain().focus().toggleItalic().run() || disabled}
+          disabled={
+            !editor.can().chain().focus().toggleItalic().run() || disabled
+          }
           className={editor.isActive("italic") ? "bg-muted" : ""}
           type="button"
         >
@@ -134,7 +163,9 @@ export function RichTextEditor({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
           disabled={disabled}
           className={editor.isActive("heading", { level: 1 }) ? "bg-muted" : ""}
           type="button"
@@ -145,7 +176,9 @@ export function RichTextEditor({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
           disabled={disabled}
           className={editor.isActive("heading", { level: 2 }) ? "bg-muted" : ""}
           type="button"
@@ -156,7 +189,9 @@ export function RichTextEditor({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
           disabled={disabled}
           className={editor.isActive("heading", { level: 3 }) ? "bg-muted" : ""}
           type="button"
@@ -223,7 +258,10 @@ export function RichTextEditor({
           <PopoverContent className="w-80">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <Select value={selectedCodeLanguage} onValueChange={setSelectedCodeLanguage}>
+                <Select
+                  value={selectedCodeLanguage}
+                  onValueChange={setSelectedCodeLanguage}
+                >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="选择语言" />
                   </SelectTrigger>
@@ -272,7 +310,12 @@ export function RichTextEditor({
 
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" disabled={disabled} type="button">
+            <Button
+              variant="ghost"
+              size="icon"
+              disabled={disabled}
+              type="button"
+            >
               <ImageIcon className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
@@ -314,7 +357,10 @@ export function RichTextEditor({
         </div>
       </div>
 
-      <EditorContent editor={editor} className="prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-md" />
+      <EditorContent
+        editor={editor}
+        className="prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-md"
+      />
     </div>
-  )
+  );
 }
