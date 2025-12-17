@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Search, Menu } from "lucide-react"
-import { useAuth } from "@/components/auth-provider"
-import { useState } from "react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, Menu } from "lucide-react";
+import { useAuth } from "@/components/auth-provider";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,16 +13,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import DonateButton from "@/components/donate-button";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export function Nav() {
-  const { user, signOut } = useAuth()
-  const [isOpen, setIsOpen] = useState(false)
+  const { user, signOut } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
   // 添加调试日志
-  console.log("Current user in Nav:", user)
+  console.log("Current user in Nav:", user);
 
   return (
     <header className="border-b">
@@ -32,13 +34,22 @@ export function Nav() {
         </Link>
 
         <div className="hidden md:flex items-center space-x-6">
-          <Link href="/" className="text-muted-foreground hover:text-foreground">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground"
+          >
             首页
           </Link>
-          <Link href="/categories" className="text-muted-foreground hover:text-foreground">
+          <Link
+            href="/categories"
+            className="text-muted-foreground hover:text-foreground"
+          >
             分类
           </Link>
-          <Link href="/about" className="text-muted-foreground hover:text-foreground">
+          <Link
+            href="/about"
+            className="text-muted-foreground hover:text-foreground"
+          >
             关于
           </Link>
         </div>
@@ -46,19 +57,32 @@ export function Nav() {
         <div className="flex items-center gap-4">
           <div className="relative hidden md:block">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input type="search" placeholder="搜索文章..." className="w-[200px] pl-8" />
+            <Input
+              type="search"
+              placeholder="搜索文章..."
+              className="w-[200px] pl-8"
+            />
           </div>
-
+          {user ? <DonateButton /> : null}
+          <ConnectButton chainStatus="icon" showBalance={false} />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
                   <Avatar className="h-8 w-8">
                     <AvatarImage
-                      src={user.user_metadata?.avatar_url || "/placeholder.svg?height=32&width=32"}
+                      src={
+                        user.user_metadata?.avatar_url ||
+                        "/placeholder.svg?height=32&width=32"
+                      }
                       alt={user.email || ""}
                     />
-                    <AvatarFallback>{user.email ? user.email.charAt(0).toUpperCase() : "U"}</AvatarFallback>
+                    <AvatarFallback>
+                      {user.email ? user.email.charAt(0).toUpperCase() : "U"}
+                    </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -75,7 +99,9 @@ export function Nav() {
                   <Link href="/profile">个人资料</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut()}>退出登录</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signOut()}>
+                  退出登录
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -93,31 +119,55 @@ export function Nav() {
             </SheetTrigger>
             <SheetContent side="right">
               <div className="flex flex-col space-y-4 mt-8">
-                <Link href="/" onClick={() => setIsOpen(false)} className="text-lg">
+                <Link
+                  href="/"
+                  onClick={() => setIsOpen(false)}
+                  className="text-lg"
+                >
                   首页
                 </Link>
-                <Link href="/categories" onClick={() => setIsOpen(false)} className="text-lg">
+                <Link
+                  href="/categories"
+                  onClick={() => setIsOpen(false)}
+                  className="text-lg"
+                >
                   分类
                 </Link>
-                <Link href="/about" onClick={() => setIsOpen(false)} className="text-lg">
+                <Link
+                  href="/about"
+                  onClick={() => setIsOpen(false)}
+                  className="text-lg"
+                >
                   关于
                 </Link>
                 {user ? (
                   <>
-                    <Link href="/dashboard" onClick={() => setIsOpen(false)} className="text-lg">
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setIsOpen(false)}
+                      className="text-lg"
+                    >
                       控制面板
                     </Link>
-                    <Link href="/blog/create" onClick={() => setIsOpen(false)} className="text-lg">
+                    <Link
+                      href="/blog/create"
+                      onClick={() => setIsOpen(false)}
+                      className="text-lg"
+                    >
                       创建文章
                     </Link>
-                    <Link href="/profile" onClick={() => setIsOpen(false)} className="text-lg">
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsOpen(false)}
+                      className="text-lg"
+                    >
                       个人资料
                     </Link>
                     <Button
                       variant="outline"
                       onClick={() => {
-                        signOut()
-                        setIsOpen(false)
+                        signOut();
+                        setIsOpen(false);
                       }}
                     >
                       退出登录
@@ -134,5 +184,5 @@ export function Nav() {
         </div>
       </div>
     </header>
-  )
+  );
 }
